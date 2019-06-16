@@ -1,0 +1,82 @@
+﻿@using SimchaFund.Data
+@model SimchaFund.Web.Models.DonorViewModel
+
+
+
+<div class="row">
+    <div class="header">
+        <h1>Donors</h1>
+    </div>
+    <div class="row header">
+        <div class="col-md-4">
+            <button class="btn btn-danger" id="new-donor">New Donor</button>
+        </div>
+    </div>
+
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Deposit</th>
+            <th>Name</th>
+            <th>Cell</th>
+            <th>Balance</th>
+            <th>Actions</th>
+        </tr>
+
+        @foreach (var donor in Model.Donor)
+        {
+                <tr>
+                    <td><button class="btn btn-success">Deposit</button></td>
+                    <td>@donor.FirstName @donor.LastName</td>
+                    <td>@donor.CellNumber</td>
+                    <td>@donor.Ballance</td>
+                    <td>
+                        <button class="btn btn-primary">Show History</button>
+                        <button class="btn btn-danger">Edit</button>
+                    </td>
+                </tr>
+         }
+           
+        </table>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">New Donor</h4>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="/donor/newdonor">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input class="form-control" name="firstname" placeholder="First Name" type="text">
+                        <br />
+                        <label>Last Name</label>
+                        <input class="form-control" name="lastname" placeholder="Last Name" type="text">
+                        <br />
+                        <label>Cell Number</label>
+                        <input class="form-control" name="cellnumber" placeholder="Cell Number" type="text">
+                        <br />
+                        <label>Initial Deposit</label>
+                        <input class="form-control" name="amount" placeholder="Amount" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Created Date</label>
+                        <input type="date" name="datecreated" class="form-control" id="datepicker">
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-primary" name="commit">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script src="~/js/newdonor.js"></script>
+}
