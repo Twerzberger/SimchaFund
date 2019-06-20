@@ -33,12 +33,13 @@ namespace SimchaFund.Web.Controllers
             return View(vm);
         }
 
+        [HttpPost]
         public IActionResult NewDonor(Donor donor, decimal amount)
         {
             var rep = new DonorRepository(_connectionString);
             rep.AddNewDonor(donor);
 
-            var deposit = new Depsit
+            var deposit = new Deposit
             {
                 DonorId = donor.Id,
                 Amount = amount,
@@ -47,9 +48,28 @@ namespace SimchaFund.Web.Controllers
 
             rep.AddDeposit(deposit);
 
-            return Redirect("/");
+            return Redirect("/donor/index");
         }
 
-        
+        [HttpPost]
+        public IActionResult EditDonor(Donor donor)
+        {
+
+            var rep = new DonorRepository(_connectionString);
+            rep.EditDonor(donor);
+
+            return Redirect("/donor/index");
+        }
+
+        [HttpPost]
+        public IActionResult Deposit(Deposit deposit)
+        {
+            var rep = new DonorRepository(_connectionString);
+            rep.AddDeposit(deposit);
+
+            return Redirect("/donor/index");
+        }
+
+
     }
 }

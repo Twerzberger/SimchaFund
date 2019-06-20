@@ -16,7 +16,7 @@ namespace SimchaFund.Data
 
         public DbSet<Simcha> Simcha { get; set; }
         public DbSet<Donor> Donor { get; set; }
-        public DbSet<Depsit> Deposit { get; set; }
+        public DbSet<Deposit> Deposit { get; set; }
         public DbSet<SimchaDonor> SimchaDonor { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

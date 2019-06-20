@@ -25,11 +25,11 @@ namespace SimchaFund.Data
             }
         }
 
-        public void AddDeposit(Depsit depsit)
+        public void AddDeposit(Deposit deposit)
         {
             using (var ctx = new SimchaDonorContext(_connectionString))
             {
-                ctx.Deposit.Add(depsit);
+                ctx.Deposit.Add(deposit);
                 ctx.SaveChanges();
             }
         }
@@ -46,25 +46,42 @@ namespace SimchaFund.Data
         {
             using (var ctx = new SimchaDonorContext(_connectionString))
             {
+                bool donate = AlreadyDonate(donor);
+
+                if (donate)
+                { 
                 return (from d in ctx.Deposit
                         join sd in ctx.SimchaDonor on d.DonorId equals sd.DonorId
                         join don in ctx.Donor on sd.DonorId equals don.Id
                         where don.Id == donor.Id
                         select d.Amount - sd.Amount).FirstOrDefault();
+                }
 
-                #region sql
-                //ctx.Database.ExecuteSqlCommand(
-                //    @"select sum(de.Amount) - sum(sd.Amount) from deposit de
-                //        join SimchaDonor sd
-                //        on de.DonorId = sd.DonorId
-                //        join Donor d
-                //        on d.Id = sd.DonorId
-                //        where d.Id = @donor.Id",
-                //    new SqlParameter("@donor.Id", donor.Id));
-                //conn.Open();
-                //SqlDataReader reader = cmd.ExecuteReader();
-                #endregion
+                return ctx.Deposit.Where(d => d.Id == donor.Id).Sum(d => d.Amount);
+
             }
         }
+
+        private bool AlreadyDonate(Donor donor)
+        {
+            using (var ctx = new SimchaDonorContext(_connectionString))
+            {
+                return ctx.SimchaDonor.Any(s => s.DonorId == donor.Id);
+            }
+        }
+
+        public void EditDonor(Donor donor)
+        {
+            using (var ctx = new SimchaDonorContext(_connectionString))
+            {
+                ctx.Database.ExecuteSqlCommand(
+                    "UPDATE Donor SET FirstName = @firstName, Lastname = @lastName, CellNumber = @cellNumber WHERE Id = @id",                    
+                    new SqlParameter("@id", donor.Id), new SqlParameter("@firstName", donor.FirstName),
+                    new SqlParameter("@cellNumber", donor.CellNumber), new SqlParameter("@lastName", donor.LastName));
+                ctx.SaveChanges();
+            }
+        }
+
+        
     }
 }

@@ -12,7 +12,7 @@
             <button class="btn btn-danger" id="new-donor">New Donor</button>
         </div>
     </div>
-
+    <br />
     <table class="table table-bordered table-striped">
         <tr>
             <th>Deposit</th>
@@ -24,55 +24,110 @@
 
         @foreach (var donor in Model.Donor)
         {
-                <tr>
-                    <td><button class="btn btn-success">Deposit</button></td>
-                    <td>@donor.FirstName @donor.LastName</td>
-                    <td>@donor.CellNumber</td>
-                    <td>@donor.Ballance</td>
-                    <td>
-                        <button class="btn btn-primary">Show History</button>
-                        <button class="btn btn-danger">Edit</button>
-                    </td>
-                </tr>
-         }
-           
-        </table>
+            <tr>
+                <td><button class="btn btn-success deposit">Deposit</button></td>
+                <td>@donor.FirstName @donor.LastName</td>
+                <td>@donor.CellNumber</td>
+                <td>@donor.Ballance.ToString("C")</td>
+                <td>
+                    <button class="btn btn-primary">Show History</button>
+                    <button class="btn btn-danger edit" data-id="@donor.Id" data-fr="@donor.FirstName"
+                            data-la="@donor.LastName" data-cl="@donor.CellNumber" data-date="@donor.DateCreated">
+                        Edit
+                    </button>
+                </td>
+            </tr>
+        }
+
+    </table>
 </div>
 
-<div class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">New Donor</h4>
-            </div>
-            <div class="modal-body">
-                <form method="POST" action="/donor/newdonor">
-                    <div class="form-group">
-                        <label>First Name</label>
-                        <input class="form-control" name="firstname" placeholder="First Name" type="text">
-                        <br />
-                        <label>Last Name</label>
-                        <input class="form-control" name="lastname" placeholder="Last Name" type="text">
-                        <br />
-                        <label>Cell Number</label>
-                        <input class="form-control" name="cellnumber" placeholder="Cell Number" type="text">
-                        <br />
-                        <label>Initial Deposit</label>
-                        <input class="form-control" name="amount" placeholder="Amount" type="text">
-                    </div>
-                    <div class="form-group">
-                        <label>Created Date</label>
-                        <input type="date" name="datecreated" class="form-control" id="datepicker">
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <button class="btn btn-primary" name="commit">Save</button>
-                    </div>
-                </form>
-            </div>
+
+
+<div class="modal col-md-4 col-md-offset-3" id="newContributorModal">
+
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true">×</span>
+                <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title">New Donor</h4>
+        </div>
+        <div class="modal-body">
+            <form method="POST" action="/donor/newdonor">
+                <div class="form-group">
+                    <input class="form-control" name="firstname" id="fn" placeholder="First Name" type="text">
+                    <br />
+                    <input class="form-control" name="lastname" id="ls" placeholder="Last Name" type="text">
+                    <br />
+                    <input class="form-control" name="cellnumber" id="cl" placeholder="Cell Number" type="text">
+                    <br />
+                    <input class="form-control" name="amount" placeholder="Amount" type="text">
+                </div>
+                <div class="form-group">
+                    <input type="date" name="datecreated" class="form-control" id="datepicker">
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary" name="commit">Save</button>
+                </div>
+            </form>
         </div>
     </div>
+</div>
+
+
+<div class="modal col-md-4 col-md-offset-3" id="editContributorModal">
+
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true">×</span>
+                <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel">Edit Contributor</h4>
+        </div>
+        <div class="modal-body">
+            <form method="post" action="/donor/editdonor">
+                <input type="text" placeholder="First Name" name="firstname" class="form-control" id="firstname" />
+                <br />
+                <input type="text" placeholder="Last Name" name="lastname" class="form-control" id="lastname" />
+                <br />
+                <input type="text" placeholder="Cell Number" name="Cellnumber" class="form-control" id="cell" />
+                <br />
+                <input type="date" name="Datecreated" class="form-control" id="datecreated" />
+                <br />
+                <input type="hidden" name="Id" id="id" />
+                <button class="btn btn-danger">Update Contributor</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal col-md-4 col-md-offset-3" id="depositModal">
+
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true">×</span>
+                <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel">Deposit</h4>
+        </div>
+        <div class="modal-body">
+            <form method="post" action="/donor/deposit">
+                <input type="text" placeholder="Amount" name="amount" class="form-control" id="amount" />
+                <br />                
+                <input type="date" name="Datecreated" class="form-control" id="datecreated" />
+                <br />
+                <input type="hidden" name="DonorId" id="donorid"/>
+                <button class="btn btn-danger">Save</button>
+            </form>
+        </div>
+    </div>
+
 </div>
 
 

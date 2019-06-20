@@ -16,7 +16,7 @@ namespace SimchaFund.Data
         public decimal Ballance { get; set; }
 
 
-        public List<Depsit> Depsits { get; set; }
+        public List<Deposit> Depsits { get; set; }
         public List<SimchaDonor> SimchaDonors { get; set; }
 
        
