@@ -38,25 +38,31 @@ namespace SimchaFund.Data
         {
             using (var ctx = new SimchaDonorContext(_connectionString))
             {
-                return ctx.Donor.ToList();
+                return ctx.Donor.Include(d => d.SimchaDonors).Include(d => d.Depsits).ToList();
             }
         }
 
-        public decimal GetBalanceForDonor(Donor donor)
+        public Decimal GetBalanceForDonor(Donor donor)
         {
             using (var ctx = new SimchaDonorContext(_connectionString))
             {
                 bool donate = AlreadyDonate(donor);
 
                 if (donate)
-                { 
-                return (from d in ctx.Deposit
-                        join sd in ctx.SimchaDonor on d.DonorId equals sd.DonorId
-                        join don in ctx.Donor on sd.DonorId equals don.Id
-                        where don.Id == donor.Id
-                        select d.Amount - sd.Amount).FirstOrDefault();
-                }
+                {
 
+                    return (from d in ctx.Deposit
+                            join sd in ctx.SimchaDonor on d.DonorId equals sd.DonorId
+                            join don in ctx.Donor on sd.DonorId equals don.Id
+                            where don.Id == donor.Id
+                            select d.Amount - sd.Amount).FirstOrDefault();
+
+                    #region join
+                    //return ctx.Database.ExecuteSqlCommand(@"(SELECT ISNULL(SUM(d.Amount), 0) FROM deposit d WHERE d.DonorId = do.Id
+                    //             -
+                    //                SELECT ISNULL(SUM(sd.Amount), 0) FROM SimchaDonor sd WHERE sd.DonorId = do.Id)");
+                    #endregion
+                }
                 return ctx.Deposit.Where(d => d.Id == donor.Id).Sum(d => d.Amount);
 
             }

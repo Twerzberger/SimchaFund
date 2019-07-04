@@ -24,7 +24,7 @@ namespace SimchaFund.Web.Controllers
             var donors = rep.AllDonors();
             foreach (var don in donors)
             {
-                don.Ballance = rep.GetBalanceForDonor(don);                
+                don.Ballance = rep.GetBalanceForDonor(don);
             }
             var vm = new DonorViewModel
             {

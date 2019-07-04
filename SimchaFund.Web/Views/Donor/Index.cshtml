@@ -25,10 +25,10 @@
         @foreach (var donor in Model.Donor)
         {
             <tr>
-                <td><button class="btn btn-success deposit">Deposit</button></td>
+                <td><button class="btn btn-success deposit"  data-donorid="@donor.Id">Deposit</button></td>
                 <td>@donor.FirstName @donor.LastName</td>
                 <td>@donor.CellNumber</td>
-                <td>@donor.Ballance</td>
+                <td>@donor.Ballance.ToString("C")</td>
                 <td>
                     <button class="btn btn-primary">Show History</button>
                     <button class="btn btn-danger edit" data-id="@donor.Id" data-fr="@donor.FirstName"
@@ -120,7 +120,7 @@
             <form method="post" action="/donor/deposit">
                 <input type="text" placeholder="Amount" name="amount" class="form-control" id="amount" />
                 <br />                
-                <input type="date" name="Datecreated" class="form-control" id="datecreated" />
+                <input type="date" name="Depositdate" class="form-control" id="datecreated" />
                 <br />
                 <input type="hidden" name="DonorId" id="donorid"/>
                 <button class="btn btn-danger">Save</button>

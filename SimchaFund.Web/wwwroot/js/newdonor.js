@@ -5,10 +5,10 @@
 
     $('.deposit').on('click', function () {
         //console.log('hello')
-        const id = $(this).data('id');
+        const id = $(this).data('donorid');
         $("#donorid").val(id);
         console.log(id);
-        $("#depositModal").modal('show');
+        $("#depositModal").modal();
     }); 
 
     $('.edit').on('click', function () {
